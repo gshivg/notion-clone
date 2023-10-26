@@ -107,6 +107,7 @@ export const getTrash = query({
     return documents;
   },
 });
+
 export const restore = mutation({
   args: {
     id: v.id("documents"),
