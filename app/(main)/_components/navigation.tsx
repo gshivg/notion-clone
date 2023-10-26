@@ -11,7 +11,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useSearch } from "@/hooks/use-search";
 import { useMediaQuery } from "usehooks-ts";
@@ -28,11 +28,13 @@ import {
 } from "@/components/ui/popover";
 import { TrashBox } from "./trash-box";
 import { useSettings } from "@/hooks/use-settings";
+import { NavBar } from "./navbar";
 
 export const Navigation = () => {
   const search = useSearch();
   const settings = useSettings();
   const pathName = usePathname();
+  const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
 
@@ -183,15 +185,19 @@ export const Navigation = () => {
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-full left-0"
         )}>
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              role="button"
-              className="h-6 w-6 text-muted-foreground"
-              onClick={resetWidth}
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <NavBar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                role="button"
+                className="h-6 w-6 text-muted-foreground"
+                onClick={resetWidth}
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
